@@ -87,9 +87,10 @@ public sealed class CollisionPart : MonoBehaviour {
                 else if (this.collisionDatas[i].form == COL_FORM.RECTANGLE)
                     this.collisions[i].SetRectangle(this.collisionDatas[i].size * actualScale, this.collisionDatas[i].angle);
 
-                Vector3 offset = Quaternion.AngleAxis(this.collisions[i].angle, Vector3.forward) * this.collisionDatas[i].offset * actualScale;
+                Quaternion rot = Quaternion.AngleAxis(this.collisions[i].angle, Vector3.forward);
+                Vector3 offset = rot * this.collisionDatas[i].offset * actualScale;
                 this.collisions[i].point.x = this.centerPoint.x + offset.x;
-                this.collisions[i].point.y = this.centerPoint.y + offset.z;
+                this.collisions[i].point.y = this.centerPoint.y + offset.y;
             }
         }
         this.awake = true;

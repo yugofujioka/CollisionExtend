@@ -196,8 +196,7 @@ public sealed class CollisionPool {
 
         return true;
     }
-	
-	static System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+    
     /// <summary>
     /// 円と矩形の接触判定
     /// </summary>
@@ -208,20 +207,20 @@ public sealed class CollisionPool {
         if (Vector2.Distance(ccol.point, rcol.point) > (ccol.range + rcol.range))
             return false;
 
-        float rad = -rcol.angle * Mathf.Deg2Rad;
+        float rad = -rcol.angle * Mathf.Deg2Rad; // 逆回転
         float rCos = (float)System.Math.Cos(rad);
         float rSin = (float)System.Math.Sin(rad);
 
-        // MEMO: 円はオフセットを反映しない（接続ノードをあらかじめ用意する）
         // ①矩形からの相対距離をとる
         Vector2 pos = ccol.point - rcol.point;
-		// ②円の位置を回転前に戻す
-		float x = pos.x * rCos - pos.y * rSin;
-		float y = pos.x * rSin + pos.y * rCos;
-		pos.x = x;
-		pos.y = y;
-		// ③矩形の中で最も円に近い点を算出
-		float halfWidth = rcol.size.x * 0.5f;
+        // ②円の位置を回転前に戻す
+        // 平面回転なので三角関数でQuaternionより高速化できる
+        float x = pos.x * rCos - pos.y * rSin;
+        float y = pos.x * rSin + pos.y * rCos;
+        pos.x = x;
+        pos.y = y;
+        // ③矩形の中で最も円に近い点を算出
+        float halfWidth = rcol.size.x * 0.5f;
         float halfHeight = rcol.size.y * 0.5f;
         Vector2 checkPoint = new Vector2(Mathf.Clamp(pos.x, -halfWidth, halfWidth), Mathf.Clamp(pos.y, -halfHeight, halfHeight));
         // ④接触判定
@@ -490,9 +489,9 @@ public sealed class CollisionPool {
 
         if (col.form == COL_FORM.CIRCLE) {
             // 円形
-			Quaternion rot = Quaternion.identity;
-			Vector3 scale = Vector3.one * col.range;
-			Matrix4x4 matrix = Matrix4x4.TRS(worldPosition, rot, scale);
+            Quaternion rot = Quaternion.identity;
+            Vector3 scale = Vector3.one * col.range;
+            Matrix4x4 matrix = Matrix4x4.TRS(worldPosition, rot, scale);
             Graphics.DrawMesh(this.debugCircle, matrix, this.debugMat,
                               LayerMask.NameToLayer("Default"), cam, 0, this.debugMpb);
         } else {

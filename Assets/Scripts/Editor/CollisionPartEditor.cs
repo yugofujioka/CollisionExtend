@@ -20,15 +20,15 @@ public sealed class CollisionPartEditor : Editor {
             for (int pointIndex = 0; pointIndex < pointCount; ++pointIndex) {
                 SerializedProperty dataProp = dataArrayProp.GetArrayElementAtIndex(pointIndex);
                 SerializedProperty formProp = dataProp.FindPropertyRelative("form");
-                EditorGUILayout.PropertyField(formProp, new GUIContent("Form", "形状"));
+                EditorGUILayout.PropertyField(formProp, new GUIContent("Form"));
                 if (formProp.enumValueIndex == (int)COL_FORM.CIRCLE)
-                    EditorGUILayout.PropertyField(dataProp.FindPropertyRelative("range"), new GUIContent("Range", "半径"));
+                    EditorGUILayout.PropertyField(dataProp.FindPropertyRelative("range"), new GUIContent("Range"));
                 else if (formProp.enumValueIndex == (int)COL_FORM.RECTANGLE)
-                    EditorGUILayout.PropertyField(dataProp.FindPropertyRelative("size"), new GUIContent("Size", "幅と高さ"));
+                    EditorGUILayout.PropertyField(dataProp.FindPropertyRelative("size"), new GUIContent("Size"));
                 SerializedProperty offsetProp = dataProp.FindPropertyRelative("offset");
                 Vector2 offset = offsetProp.vector3Value;
-                offsetProp.vector3Value = EditorGUILayout.Vector2Field(new GUIContent("Offset", "オフセット"), offset);
-                EditorGUILayout.Slider(dataProp.FindPropertyRelative("angle"), -180f, 180f, new GUIContent("Angle", "回転角"));
+                offsetProp.vector3Value = EditorGUILayout.Vector2Field(new GUIContent("Offset"), offset);
+                EditorGUILayout.Slider(dataProp.FindPropertyRelative("angle"), -180f, 180f, new GUIContent("Angle"));
 
                 GUILayout.BeginHorizontal();
                 // コリジョン挿入
